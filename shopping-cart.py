@@ -40,12 +40,17 @@ user_date = (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) #consulted: 
     #print(user_input)
 
 
+while True: 
 
-selected_id = input("Please input a product identifier: ")
+    selected_id = input("Please input a product identifier: ")
 
-matching_products = [p for p in products if str(p["id"]) == str(selected_id)]
-matching_product = matching_products[0]
-print("SELECTED PRODUCT:" + matching_product["name"] + " " + str(matching_product["price"]))
+    if selected_id == "DONE":
+        break
+
+    else: 
+        matching_products = [p for p in products if str(p["id"]) == str(selected_id)]
+        matching_product = matching_products[0]
+        print("SELECTED PRODUCT:" + matching_product["name"] + " " + str(matching_product["price"]))
 
 
 print("-----------")
