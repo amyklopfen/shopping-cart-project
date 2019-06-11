@@ -1,4 +1,10 @@
 # shopping_cart.py
+shopping = True
+
+import datetime
+
+from datetime import date
+from datetime import time
 
 from pprint import pprint
 
@@ -25,7 +31,39 @@ products = [
     {"id":20, "name": "Pomegranate Cranberry & Aloe Vera Enrich Drink", "department": "beverages", "aisle": "juice nectars", "price": 4.25}
 ] # based on data from Instacart: https://www.instacart.com/datasets/grocery-shopping-2017
 
-print(products)
+#print(products)
 # pprint(products)
 
-# TODO: write some Python code here to produce the desired output
+user_date = (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) #consulted: https://stackoverflow.com/questions/7999935/python-datetime-to-string-without-microsecond-component for datetime help
+
+    #user_input = int(input())
+    #print(user_input)
+
+
+
+selected_id = input("Please input a product identifier: ")
+
+print(selected_id)
+print(type(selected_id))
+
+
+print("-----------")
+print("Amy's Market")
+print("www.amys-market.com")
+print("-----------")
+print("CHECKOUT AT:" + user_date)
+print("-----------")
+print("SELECTED PRODUCTS:")
+
+#print(final product list)
+
+#print(subtotal)
+
+#print(tax)
+
+print("-----------")
+print("THANK YOU, COME BACK SOON!")
+print("-----------")
+
+
+
