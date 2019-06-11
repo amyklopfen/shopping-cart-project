@@ -39,6 +39,7 @@ user_date = (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) #consulted: 
     #user_input = int(input())
     #print(user_input)
 
+total_price = 0
 
 while True: 
 
@@ -50,8 +51,10 @@ while True:
     else: 
         matching_products = [p for p in products if str(p["id"]) == str(selected_id)]
         matching_product = matching_products[0]
+        total_price = total_price + matching_product["price"]
         print("SELECTED PRODUCT:" + matching_product["name"] + " " + str(matching_product["price"]))
 
+print("TOTAL PRICE: " + str(total_price))
 
 print("-----------")
 print("Amy's Market")
