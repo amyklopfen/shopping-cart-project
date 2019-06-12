@@ -40,21 +40,32 @@ user_date = (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) #consulted: 
     #print(user_input)
 
 total_price = 0
+selected_ids = []
 
 while True: 
+    try: 
+        user_input = input("Please input a product identifier: ")
 
-    selected_id = input("Please input a product identifier: ")
+        if user_input == "DONE" or "done" or "Done":
+            break
+        elif int(user_input) > 20:
+            print("Error, please enter valid number")
+        elif int(user_input) <= 0:
+            print("Error, please enter a valid number")
+        else: 
+            selected_id = str(user_input)
+            selected_ids.append(selected_id)
+    except ValueError:
+        print("Error, please enter valid number")
 
-    if selected_id == "DONE":
-        break
+for selected_id in selected_ids:
+    matching_products = [p for p in products if int(p["id"]) == int(selected_id)]
+    matching_product = matching_products[0]
+    total_price = total_price + matching_product["price"]
+    print("SELECTED PRODUCT:" + matching_product["name"] + " " + str(matching_product["price"]))
 
-    else: 
-        matching_products = [p for p in products if str(p["id"]) == str(selected_id)]
-        matching_product = matching_products[0]
-        total_price = total_price + matching_product["price"]
-        print("SELECTED PRODUCT:" + matching_product["name"] + " " + str(matching_product["price"]))
-
-print("TOTAL PRICE: " + str(total_price))
+tax = total_price * 0.0875
+final_price = total_price + tax
 
 print("-----------")
 print("Amy's Market")
@@ -62,7 +73,10 @@ print("www.amys-market.com")
 print("-----------")
 print("CHECKOUT AT:" + user_date)
 print("-----------")
-print("SELECTED PRODUCTS:")
+
+print("SUBTOTAL: " + str(round(total_price, 2))) #stackoverflow.com/questions/20457038/how-to-round-to-2-decimals-with-python
+print("TAX: " + str(round(tax,2)))
+print("TOTAL: " + str(round(final_price,2)))
 
 #print(final product list)
 
