@@ -1,12 +1,24 @@
 # shopping_cart.py
 shopping = True
 
+import os
+from dotenv import load_dotenv
+import sendgrid
+from sendgrid.helpers.mail import * # info drawn from send notification exercise.
+
+load_dotenv()
+
 import datetime
 
 from datetime import date
 from datetime import time
 
-from pprint import pprint
+import pprint
+
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
+MY_EMAIL_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "OOPS, please set env var called 'MY_EMAIL_ADDRESS'")
+
+sg = sendgrid.SendGridAPIClient(apikey=SENDGRID_API_KEY)
 
 products = [
     {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50, "price_per": "F"},
@@ -28,17 +40,12 @@ products = [
     {"id":17, "name": "Rendered Duck Fat", "department": "meat seafood", "aisle": "poultry counter", "price": 9.99, "price_per": "F"},
     {"id":18, "name": "Pizza for One Suprema Frozen Pizza", "department": "frozen", "aisle": "frozen pizza", "price": 12.50, "price_per": "F"},
     {"id":19, "name": "Gluten Free Quinoa Three Cheese & Mushroom Blend", "department": "dry goods pasta", "aisle": "grains rice dried goods", "price": 3.99, "price_per": "F"},
-    {"id":20, "name": "Pomegranate Cranberry & Aloe Vera Enrich Drink", "department": "beverages", "aisle": "juice nectars", "price": 4.25, "price_per": "F"},
-    {"id":21, "name": "Organic Bananas", "department": "produce", "aisle": "fruit", "price": 0.79, "price_per": "T"}
+    {"id":20, "name": "Pomegranate Cranberry & Aloe Vera Enrich Drink", "department": "beverages", "aisle": "juice nectars", "price": 4.25, "price_per": "F"}
 ] # based on data from Instacart: https://www.instacart.com/datasets/grocery-shopping-2017
 
-#print(products)
-# pprint(products)
 
-user_date = (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) #consulted: https://stackoverflow.com/questions/7999935/python-datetime-to-string-without-microsecond-component for datetime help
 
-    #user_input = int(input())
-    #print(user_input)
+user_date = (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S:%p")) #consulted: https://stackoverflow.com/questions/7999935/python-datetime-to-string-without-microsecond-component for datetime help
 
 total_price = 0
 price_per_pound = 0
@@ -48,13 +55,9 @@ while True:
     try: 
         user_input = input("Please input a product identifier: ")
 
-        if user_input == "DONE": #used three different options to account for three likely iterations of input
+        if user_input.lower() == "done": #used lower function to account for different forms of entering 'done.' Recommended by Zach Diamond!
             break
-        elif user_input == "Done":
-            break
-        elif user_input == "done":
-            break
-        elif int(user_input) > 21: #converted back to int for > comparison
+        elif int(user_input) > 20: #converted back to int for > comparison
             print("Error, please enter valid number")
         elif int(user_input) <= 0:
             print("Error, please enter a valid number")
@@ -68,10 +71,12 @@ for selected_id in selected_ids:
     matching_products = [p for p in products if int(p["id"]) == int(selected_id)]
     matching_product = matching_products[0]
     total_price = total_price + matching_product["price"]
-    print("SELECTED PRODUCT:" + matching_product["name"] + " " + str(matching_product["price"]))
+    #print("SELECTED PRODUCT:" + matching_product["name"] + " " + str(matching_product["price"]))
+
 
 tax = total_price * 0.0875
 final_price = total_price + tax
+
 
 print("-----------")
 print("Amy's Market")
@@ -79,20 +84,68 @@ print("www.amys-market.com")
 print("-----------")
 print("CHECKOUT AT:" + user_date)
 print("-----------")
-
-print("SUBTOTAL: " + "$"+ str(round(total_price, 2))) #stackoverflow.com/questions/20457038/how-to-round-to-2-decimals-with-python
-print("TAX: " + "$"+ str(round(tax,2)))
-print("TOTAL: " + "$"+ str(round(final_price,2)))
-
-#print(final product list)
-
-#print(subtotal)
-
-#print(tax)
+for selected_id in selected_ids:
+    matching_products = [p for p in products if int(p["id"]) == int(selected_id)]
+    matching_product = matching_products[0]
+    total_price = total_price + matching_product["price"]
+    print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]))
+print("SUBTOTAL: " + "${0:.2f}".format(total_price)) 
+print("TAX: " + "${0:.2f}".format(tax))
+print("TOTAL: " + "${0:.2f}".format(final_price))
 
 print("-----------")
 print("THANK YOU, COME BACK SOON!")
 print("-----------")
 
-with open ()
+#Write receipt to file. Tailored from course notes on writing to file
+
+saved_receipt = datetime.datetime.now()
+my_receipt = "saved_receipt.txt" 
+with open(my_receipt, "w") as file: 
+    file.write("-----------")
+    file.write("\n")
+    file.write("Amy's Market")
+    file.write("\n")
+    file.write("www.amys-market.com")
+    file.write("\n")
+    file.write("CHECKOUT AT:" + user_date)
+    file.write("\n")
+    file.write("SUBTOTAL: " + "${0:.2f}".format(total_price))
+    file.write("\n")
+    file.write("TAX: " + "${0:.2f}".format(tax))
+    file.write("\n")
+    file.write("TOTAL: " + "${0:.2f}".format(final_price))
+    file.write("\n")
+    file.write("-----------")
+    file.write("\n")
+    file.write("THANK YOU, COME BACK SOON!")
+    file.write("\n")
+    file.write("-----------")
+
+#Send email receipt; tailed off notification exercise
+user_email = input("Please enter your email for an electronic copy of your receipt: ")
+from_email = Email(MY_EMAIL_ADDRESS)
+to_email = Email(user_email)
+subject = "Your receipt from Amy's Market"
+message_text = "-----" + " " + "Amy's Market " + " " + " www.amys-market.com" + " ----- " + " " + "CHECKOUT AT:" +" " + user_date +" " +" ----- " + " SUBTOTAL: " + "${0:.2f}".format(total_price) + " " + "TAX: " + "${0:.2f}".format(tax)+ " " + "TOTAL: "+ " " + "${0:.2f}".format(final_price) + "-----------" + " " + "THANK YOU, COME BACK SOON!" + "-----------"
+content = Content("text/plain", message_text)
+mail = Mail(from_email, subject, to_email, content)
+
+
+response = sg.client.mail.send.post(request_body=mail.get())
+
+
+
+pp = pprint.PrettyPrinter(indent=4)
+
+print("----------------------")
+print("EMAIL")
+print("----------------------")
+print("RESPONSE: ", type(response))
+print("STATUS:", response.status_code) 
+print("HEADERS:")
+pp.pprint(dict(response.headers))
+print("BODY:")
+print(response.body) 
+
 
