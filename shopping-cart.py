@@ -48,8 +48,8 @@ products = [
 user_date = (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S:%p")) #consulted: https://stackoverflow.com/questions/7999935/python-datetime-to-string-without-microsecond-component for datetime help
 
 total_price = 0
-price_per_pound = 0
 selected_ids = []
+new_price = 0
 
 while True: 
     try: 
@@ -67,15 +67,9 @@ while True:
     except ValueError:
         print("Error, please enter valid number")
 
-for selected_id in selected_ids:
-    matching_products = [p for p in products if int(p["id"]) == int(selected_id)]
-    matching_product = matching_products[0]
-    total_price = total_price + matching_product["price"]
+
     #print("SELECTED PRODUCT:" + matching_product["name"] + " " + str(matching_product["price"]))
 
-
-tax = total_price * 0.0875
-final_price = total_price + tax
 
 
 print("-----------")
@@ -89,6 +83,10 @@ for selected_id in selected_ids:
     matching_product = matching_products[0]
     total_price = total_price + matching_product["price"]
     print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]))
+    
+tax = total_price * 0.0875
+final_price = total_price + tax
+
 print("SUBTOTAL: " + "${0:.2f}".format(total_price)) 
 print("TAX: " + "${0:.2f}".format(tax))
 print("TOTAL: " + "${0:.2f}".format(final_price))
@@ -108,6 +106,11 @@ with open(my_receipt, "w") as file:
     file.write("\n")
     file.write("www.amys-market.com")
     file.write("\n")
+    for selected_id in selected_ids:
+        matching_products = [p for p in products if int(p["id"]) == int(selected_id)]
+        matching_product = matching_products[0]
+        new_price = new_price + matching_product["price"]
+        file.write("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]) + "\n")
     file.write("CHECKOUT AT:" + user_date)
     file.write("\n")
     file.write("SUBTOTAL: " + "${0:.2f}".format(total_price))
@@ -127,7 +130,7 @@ user_email = input("Please enter your email for an electronic copy of your recei
 from_email = Email(MY_EMAIL_ADDRESS)
 to_email = Email(user_email)
 subject = "Your receipt from Amy's Market"
-message_text = "-----" + " " + "Amy's Market " + " " + " www.amys-market.com" + " ----- " + " " + "CHECKOUT AT:" +" " + user_date +" " +" ----- " + " SUBTOTAL: " + "${0:.2f}".format(total_price) + " " + "TAX: " + "${0:.2f}".format(tax)+ " " + "TOTAL: "+ " " + "${0:.2f}".format(final_price) + "-----------" + " " + "THANK YOU, COME BACK SOON!" + "-----------"
+message_text = "-----" + " " + "Amy's Market " + " " + " www.amys-market.com" + " ----- " +  " " + "CHECKOUT AT:" +" " + user_date + " " + " ----- " + str(product_list) + " SUBTOTAL: " + "${0:.2f}".format(total_price) + " " + "TAX: " + "${0:.2f}".format(tax)+ " " + "TOTAL: "+ " " + "${0:.2f}".format(final_price) + "-----------" + " " + "THANK YOU, COME BACK SOON!" + "-----------"
 content = Content("text/plain", message_text)
 mail = Mail(from_email, subject, to_email, content)
 
