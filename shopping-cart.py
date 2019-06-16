@@ -79,7 +79,7 @@ for selected_id in selected_ids:
     matching_products = [p for p in products if int(p["id"]) == int(selected_id)]
     matching_product = matching_products[0]
     total_price = total_price + matching_product["price"]
-    print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]))
+    print("SELECTED PRODUCT: " + matching_product["name"] + " " + "${0:.2f}".format(matching_product["price"]))
 
 tax = total_price * 0.0875
 final_price = total_price + tax
@@ -106,7 +106,7 @@ with open("receipt-" + my_receipt + ".txt", "w") as file:
         matching_products = [p for p in products if int(p["id"]) == int(selected_id)]
         matching_product = matching_products[0]
         new_price = new_price + matching_product["price"]
-        file.write("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]) + "\n")
+        file.write("SELECTED PRODUCT: " + matching_product["name"] + " " + "${0:.2f}".format(matching_product["price"]) + "\n")
     file.write("CHECKOUT AT:" + user_date)
     file.write("\n")
     file.write("SUBTOTAL: " + "${0:.2f}".format(total_price))
