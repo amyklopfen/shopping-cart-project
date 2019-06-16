@@ -1,6 +1,6 @@
 # shopping-cart-project
 
-#clone repo in Github to place under control; download to Github desktop
+# clone repo in Github to place under control; download to Github desktop
 
 # shopping_cart.py
 
@@ -64,18 +64,18 @@ total_price = 0
 selected_ids = []
 new_price = 0
 
-#used try/except for error handling to ensure that any invalid input will redirect user to input prompt
+# used try/except for error handling to ensure that any invalid input will redirect user to input prompt
 
 while True: 
     try: 
         user_input = input("Please input a product identifier: ")
 
-#used lower function to account for different forms of entering 'done.' Recommended by Zach Diamond!
+# used lower function to account for different forms of entering 'done.' Recommended by Zach Diamond!
 
         if user_input.lower() == "done": 
             break
 
-#converted user input back to int for comparison
+# converted user input back to int for comparison
 
         elif int(user_input) > 20: #converted back to int for > comparison
             print("Error, please enter valid number")
@@ -87,7 +87,7 @@ while True:
     except ValueError:
         print("Error, please enter valid number")
 
-#print receipt text 
+# print receipt text 
 
 print("-----------")
 print("Amy's Market")
@@ -96,7 +96,7 @@ print("-----------")
 print("CHECKOUT AT:" + user_date)
 print("-----------")
 
-#set up for loop to account for any user selection, match price of selected item, and calculate the total price of user selection
+# set up for loop to account for any user selection, match price of selected item, and calculate the total price of user selection
 
 for selected_id in selected_ids:
     matching_products = [p for p in products if int(p["id"]) == int(selected_id)]
@@ -107,7 +107,7 @@ for selected_id in selected_ids:
 tax = total_price * 0.0875
 final_price = total_price + tax
 
-#print subtotoal/tax/total and convert prices to USD using $"${0:.2f}".format() command
+# print subtotoal/tax/total and convert prices to USD using $"${0:.2f}".format() command
 
 print("SUBTOTAL: " + "${0:.2f}".format(total_price)) 
 print("TAX: " + "${0:.2f}".format(tax))
