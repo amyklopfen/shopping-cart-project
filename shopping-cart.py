@@ -68,9 +68,6 @@ while True:
         print("Error, please enter valid number")
 
 
-    #print("SELECTED PRODUCT:" + matching_product["name"] + " " + str(matching_product["price"]))
-
-
 
 print("-----------")
 print("Amy's Market")
