@@ -96,6 +96,7 @@ for selected_id in selected_ids:
 tax = total_price * 0.0875
 final_price = total_price + tax
 
+#print subtotoal/tax/total and convert prices to USD using $"${0:.2f}".format() command
 print("SUBTOTAL: " + "${0:.2f}".format(total_price)) 
 print("TAX: " + "${0:.2f}".format(tax))
 print("TOTAL: " + "${0:.2f}".format(final_price))
@@ -109,6 +110,8 @@ print("-----------")
 my_receipt = (datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")) 
 
 #use html coding for nicer format in output file
+#open(), 'w' commands creates and opens new file for writing
+#file.write() will write the text to the new file
 with open("receipt-" + my_receipt + ".txt", "w") as file: 
     file.write("-----------")
     file.write("\n")
