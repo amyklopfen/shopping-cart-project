@@ -97,9 +97,8 @@ print("-----------")
 
 #Write receipt to file. Tailored from course notes on writing to file
 
-saved_receipt = datetime.datetime.now()
-my_receipt = "saved_receipt.txt" 
-with open(my_receipt, "w") as file: 
+my_receipt = (datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")) 
+with open("receipt-" + my_receipt + ".txt", "w") as file: 
     file.write("-----------")
     file.write("\n")
     file.write("Amy's Market")
@@ -130,7 +129,7 @@ user_email = input("Please enter your email for an electronic copy of your recei
 from_email = Email(MY_EMAIL_ADDRESS)
 to_email = Email(user_email)
 subject = "Your receipt from Amy's Market"
-message_text = "-----" + " " + "Amy's Market " + " " + " www.amys-market.com" + " ----- " +  " " + "CHECKOUT AT:" +" " + user_date + " " + " ----- " + str(product_list) + " SUBTOTAL: " + "${0:.2f}".format(total_price) + " " + "TAX: " + "${0:.2f}".format(tax)+ " " + "TOTAL: "+ " " + "${0:.2f}".format(final_price) + "-----------" + " " + "THANK YOU, COME BACK SOON!" + "-----------"
+message_text = "-----" + " " + "Amy's Market " + " " + " www.amys-market.com" + " ----- " +  str(final_product) + " " + "CHECKOUT AT:" + " " + user_date + " " + " ----- " + " SUBTOTAL: " + "${0:.2f}".format(total_price) + " " + "TAX: " + "${0:.2f}".format(tax)+ " " + "TOTAL: "+ " " + "${0:.2f}".format(final_price) + "-----------" + " " + "THANK YOU, COME BACK SOON!" + "-----------"
 content = Content("text/plain", message_text)
 mail = Mail(from_email, subject, to_email, content)
 
