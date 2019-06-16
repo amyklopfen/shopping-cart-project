@@ -3,13 +3,17 @@
 #clone repo in Github to place under control; download to Github desktop
 
 # shopping_cart.py
+
 shopping = True
 
 import os
 from dotenv import load_dotenv
 import sendgrid
+
 # info drawn from send notification exercise.
+
 from sendgrid.helpers.mail import * 
+
 # copied env file from notification exercies, used same API key.
 
 load_dotenv()
@@ -50,8 +54,10 @@ products = [
 ] # based on data from Instacart: https://www.instacart.com/datasets/grocery-shopping-2017
 
 
-#consulted: https://stackoverflow.com/questions/7999935/python-datetime-to-string-without-microsecond-component for datetime help
-#turned datetime into string
+# consulted: https://stackoverflow.com/questions/7999935/python-datetime-to-string-without-microsecond-component for datetime help
+
+# turned datetime into string
+
 user_date = (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S:%p")) 
 
 total_price = 0
@@ -59,15 +65,18 @@ selected_ids = []
 new_price = 0
 
 #used try/except for error handling to ensure that any invalid input will redirect user to input prompt
+
 while True: 
     try: 
         user_input = input("Please input a product identifier: ")
 
 #used lower function to account for different forms of entering 'done.' Recommended by Zach Diamond!
+
         if user_input.lower() == "done": 
             break
 
 #converted user input back to int for comparison
+
         elif int(user_input) > 20: #converted back to int for > comparison
             print("Error, please enter valid number")
         elif int(user_input) <= 0:
@@ -79,6 +88,7 @@ while True:
         print("Error, please enter valid number")
 
 #print receipt text 
+
 print("-----------")
 print("Amy's Market")
 print("www.amys-market.com")
@@ -87,6 +97,7 @@ print("CHECKOUT AT:" + user_date)
 print("-----------")
 
 #set up for loop to account for any user selection, match price of selected item, and calculate the total price of user selection
+
 for selected_id in selected_ids:
     matching_products = [p for p in products if int(p["id"]) == int(selected_id)]
     matching_product = matching_products[0]
@@ -97,6 +108,7 @@ tax = total_price * 0.0875
 final_price = total_price + tax
 
 #print subtotoal/tax/total and convert prices to USD using $"${0:.2f}".format() command
+
 print("SUBTOTAL: " + "${0:.2f}".format(total_price)) 
 print("TAX: " + "${0:.2f}".format(tax))
 print("TOTAL: " + "${0:.2f}".format(final_price))
@@ -105,13 +117,18 @@ print("-----------")
 print("THANK YOU, COME BACK SOON!")
 print("-----------")
 
-#Write receipt to file. Tailored from course notes on writing to file
-#revised from datetime in receipt for filename, %p; including AM/PM threw off code
+# Write receipt to file. Tailored from course notes on writing to file
+
+# revised from datetime in receipt for filename, %p; including AM/PM threw off code
+
 my_receipt = (datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")) 
 
-#use html coding for nicer format in output file
-#open(), 'w' commands creates and opens new file for writing
-#file.write() will write the text to the new file
+# use html coding for nicer format in output file
+
+# open(), 'w' commands creates and opens new file for writing
+
+# file.write() will write the text to the new file
+
 with open("receipt-" + my_receipt + ".txt", "w") as file: 
     file.write("-----------")
     file.write("\n")
@@ -138,17 +155,20 @@ with open("receipt-" + my_receipt + ".txt", "w") as file:
     file.write("\n")
     file.write("-----------")
 
-#Send email receipt; tailed code off notification exercise
+# Send email receipt; tailed code off notification exercise
 
-#input prompt allows email to be sent to any user email
+# input prompt allows email to be sent to any user email
+
 user_email = input("Please enter your email for an electronic copy of your receipt: ")
 
-#from email saved in env file with API key
+# from email saved in env file with API key
+
 from_email = Email(MY_EMAIL_ADDRESS)
 to_email = Email(user_email)
 subject = "Your receipt from Amy's Market"
 
-#must concatenate strings for message
+# must concatenate strings for message
+
 message_text = "-----" + " " + "Amy's Market " + " " + " www.amys-market.com" + " ----- " + " " + "CHECKOUT AT:" + " " + user_date + " " + " ----- " + " SUBTOTAL: " + "${0:.2f}".format(total_price) + " " + "TAX: " + "${0:.2f}".format(tax)+ " " + "TOTAL: "+ " " + "${0:.2f}".format(final_price) + "-----------" + " " + "THANK YOU, COME BACK SOON!" + "-----------"
 content = Content("text/plain", message_text) #message delivered in plain text format
 mail = Mail(from_email, subject, to_email, content)
