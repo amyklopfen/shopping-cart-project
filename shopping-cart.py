@@ -83,7 +83,7 @@ for selected_id in selected_ids:
     matching_product = matching_products[0]
     total_price = total_price + matching_product["price"]
     print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]))
-    
+
 tax = total_price * 0.0875
 final_price = total_price + tax
 
@@ -129,7 +129,7 @@ user_email = input("Please enter your email for an electronic copy of your recei
 from_email = Email(MY_EMAIL_ADDRESS)
 to_email = Email(user_email)
 subject = "Your receipt from Amy's Market"
-message_text = "-----" + " " + "Amy's Market " + " " + " www.amys-market.com" + " ----- " +  str(final_product) + " " + "CHECKOUT AT:" + " " + user_date + " " + " ----- " + " SUBTOTAL: " + "${0:.2f}".format(total_price) + " " + "TAX: " + "${0:.2f}".format(tax)+ " " + "TOTAL: "+ " " + "${0:.2f}".format(final_price) + "-----------" + " " + "THANK YOU, COME BACK SOON!" + "-----------"
+message_text = "-----" + " " + "Amy's Market " + " " + " www.amys-market.com" + " ----- " + " " + "CHECKOUT AT:" + " " + user_date + " " + " ----- " + " SUBTOTAL: " + "${0:.2f}".format(total_price) + " " + "TAX: " + "${0:.2f}".format(tax)+ " " + "TOTAL: "+ " " + "${0:.2f}".format(final_price) + "-----------" + " " + "THANK YOU, COME BACK SOON!" + "-----------"
 content = Content("text/plain", message_text)
 mail = Mail(from_email, subject, to_email, content)
 
